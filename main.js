@@ -55,6 +55,8 @@ activityMap.graph.loadConnections([
   ['Importing costumes', 'Exporting costumes']
 ])
 
+const activityView = new ActivityView()
+
 const renderAll = () => {
   Object.assign(document.body.style, {
     padding: 0,
@@ -72,8 +74,10 @@ const renderAll = () => {
   })
 
   activityMap.render()
+  activityView.render()
 
   container.appendChild(activityMap.root)
+  container.appendChild(activityView.root)
 
   document.body.appendChild(container)
 

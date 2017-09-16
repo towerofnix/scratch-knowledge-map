@@ -1,5 +1,9 @@
 (Most recent entries are at the top of the file.)
 
+TODO: Make a class for renderable things to inherit from. There's a fair
+      amount of boilerplate code currently being shared between ActivityView
+      and ActivityMap, which should be stuck in its own class.
+
 TODO: Display content! Clicking a node should show its content. I'm not
       certain on how that content should be stored; perhaps an iframe (then
       each entry has a separate HTML file).
