@@ -1,0 +1,3 @@
+TODO: Separate the code of the activity map into two classes - one for
+      handling the actual data of the node graph (probably a subclass), and
+      one for managing UI state and rendering and such.
