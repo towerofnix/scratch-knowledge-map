@@ -58,6 +58,9 @@ class ActivityMap {
   constructor() {
     this.graph = new ActivityMapGraph()
 
+    this.events = new EventEmitter()
+    this.events.addEvent('openActivity')
+
     this.root = null
   }
 
@@ -165,13 +168,7 @@ class ActivityMap {
   }
 
   nodeClicked(node) {
-    if (this.graph.completedActivityNodes.includes(node)) {
-      this.graph.completedActivityNodes
-        .splice(this.graph.completedActivityNodes.indexOf(node), 1)
-    } else {
-      this.graph.completedActivityNodes.push(node)
-    }
-    this.render()
+    this.events.emit('openActivity', node)
   }
 }
 

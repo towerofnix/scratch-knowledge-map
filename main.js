@@ -2,6 +2,11 @@
 
 const activityMap = new ActivityMap()
 
+activityMap.events.on('openActivity', node => {
+  activityView.loadDocument(node.label)
+  activityView.show()
+})
+
 activityMap.graph.loadNodes([
   [-700, 0, 'Coordinates'],
   [-500, 0, 'Sprites'],
@@ -56,6 +61,27 @@ activityMap.graph.loadConnections([
 ])
 
 const activityView = new ActivityView()
+
+const completedNodes = activityMap.graph.completedActivityNodes
+const selectedNode = () => {
+  return activityMap.graph.findNodeByLabel(activityView.documentBasename)
+}
+
+activityView.events.on('markAsComplete', () => {
+  const node = selectedNode()
+  if (!completedNodes.includes(node)) {
+    completedNodes.push(node)
+    activityMap.render()
+  }
+})
+
+activityView.events.on('markAsNotComplete', () => {
+  const node = selectedNode()
+  if (completedNodes.includes(node)) {
+    completedNodes.splice(completedNodes.indexOf(node), 1)
+    activityMap.render()
+  }
+})
 
 const renderAll = () => {
   Object.assign(document.body.style, {
