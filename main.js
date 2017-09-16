@@ -100,12 +100,12 @@ const renderAll = () => {
 }
 
 const loadActivities = () => {
-  activityMap.loadCompletedActivities(localStorage.completedActivities)
+  activityMap.graph.loadCompletedActivities(localStorage.completedActivities)
 }
 
 loadActivities()
 renderAll()
 
 window.onbeforeunload = function() {
-  localStorage.completedActivities = activityMap.saveCompletedActivities()
+  localStorage.completedActivities = activityMap.graph.saveCompletedActivities()
 }

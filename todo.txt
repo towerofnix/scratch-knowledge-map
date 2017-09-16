@@ -1,3 +1,10 @@
+(Most recent entries are at the top of the file.)
+
+TODO: Display content! Clicking a node should show its content. I'm not
+      certain on how that content should be stored; perhaps an iframe (then
+      each entry has a separate HTML file).
+
 TODO: Separate the code of the activity map into two classes - one for
       handling the actual data of the node graph (probably a subclass), and
       one for managing UI state and rendering and such.
+      (Done!)

@@ -14,26 +14,24 @@ const statusColors = {
   [LOCKED]: '#444'
 }
 
-class ActivityMap {
+class ActivityMapGraph extends NodeGraph {
   constructor() {
-    this.graph = new NodeGraph()
+    super()
 
-    this.root = null
-
-    this.completedActivities = []
+    this.completedActivityNodes = []
   }
 
-  getStatusOfActivity (node, parents = []) {
+  getStatusOfActivity(node, parents = []) {
     // Guard against infinite recursion.
     if (parents.includes(node)) {
-      throw new Error('Bad chain:', parents)
+      throw new Error('Recursive chain:', parents)
     }
 
-    if (this.completedActivities.includes(node)) {
+    if (this.completedActivityNodes.includes(node)) {
       return COMPLETED
     }
 
-    const dependents = this.graph.connections
+    const dependents = this.connections
       .filter(({from, to}) => to === node)
       .map(({from, to}) => from)
 
@@ -43,16 +41,24 @@ class ActivityMap {
   }
 
   loadCompletedActivities(string = '') {
-    this.completedActivities.push(
-      ...string.split('§').map(node => this.graph.findNodeByLabel(node))
+    this.completedActivityNodes.push(
+      ...string.split('§').map(node => this.findNodeByLabel(node))
         .filter(Boolean)
     )
   }
 
   saveCompletedActivities() {
-    return this.completedActivities.map(node => {
+    return this.completedActivityNodes.map(node => {
       return node.label
     }).join('§')
+  }
+}
+
+class ActivityMap {
+  constructor() {
+    this.graph = new ActivityMapGraph()
+
+    this.root = null
   }
 
   render() {
@@ -130,7 +136,7 @@ class ActivityMap {
     for (let node of nodes) {
       const { x, y, label } = node
 
-      const status = activityMap.getStatusOfActivity(node)
+      const status = this.graph.getStatusOfActivity(node)
 
       const rect = createSVGElement('rect')
       rect.setAttribute('x', getRenderX(x) - 20)
@@ -159,11 +165,11 @@ class ActivityMap {
   }
 
   nodeClicked(node) {
-    if (this.completedActivities.includes(node)) {
-      this.completedActivities
-        .splice(this.completedActivities.indexOf(node), 1)
+    if (this.graph.completedActivityNodes.includes(node)) {
+      this.graph.completedActivityNodes
+        .splice(this.graph.completedActivityNodes.indexOf(node), 1)
     } else {
-      this.completedActivities.push(node)
+      this.graph.completedActivityNodes.push(node)
     }
     this.render()
   }
